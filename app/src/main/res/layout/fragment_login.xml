@@ -27,12 +27,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:text="Usernamesignup"
             tools:layout_editor_absoluteX="118dp"
             tools:layout_editor_absoluteY="118dp" />
 
         <Button
-            android:id="@+id/btnSignup"
+            android:id="@+id/btnLoginLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Signup"
@@ -40,7 +39,7 @@
             tools:layout_editor_absoluteY="298dp" />
 
         <TextView
-            android:id="@+id/Login"
+            android:id="@+id/tvSignupLinkLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Logein"

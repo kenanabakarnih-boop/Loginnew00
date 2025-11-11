@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.Firebase;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 
 
 public class LoginFragment extends Fragment {
@@ -44,38 +45,41 @@ public void onCreate(Bundle savedInstanceState) {
         fbs = FirebaseServices.getInstance();
         etUsername = getView().findViewById(R.id.etUsernameLogin);
         etPassword = getView().findViewById(R.id.etPasswordLogin);
-        btnlogin= getView().findViewById(R.id.btnlogin);
-            tvSignuplink =getView().findViewById(R.id.tvSignupLinkLogin);
-            tvSignupiink.setOnClickListener(new View.OnClickListener() {
-               @Override
-                public void onClick(View view){
-                  gotoSignupFragment();
-               }
+        btnlogin = getView().findViewById(R.id.btnLoginLogin);
+        tvSignuplink = getView().findViewById(R.id.tvSignupLinkLogin);
+        tvSignuplink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSignupFragment();
+            }
 
         });
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view ) {
+            public void onClick(View view) {
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
-                if(username.trim().isEmpty() && password.trim().isEmpty()) {
-                    Toast.makeText(getActivity(), "Some fields are empty!",Toast.LENGTH_SHORT).show();
+                if (username.trim().isEmpty() && password.trim().isEmpty()) {
+                    Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                fbs.getAuth().signInWithEmailAndPassword(username, password).addOnCompleteListener(getActivity(),
-                @Override
-                public void onComplate(@NonNull Task<AuthResult> task){
-                    if (task.isSuccessful()){
+                fbs.getAuth().signInWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
                         Toast.makeText(getActivity(), "You have successfully loged in!", Toast.LENGTH_SHORT).show();
-                    }
 
-                    else
-                    {
-                        Toast.makeText(getActivity(), "Faild to login ", Toast.LENGTH_SHORT).show();
                     }
-                }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Faild to login ", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
+
+
         });
     }
 
