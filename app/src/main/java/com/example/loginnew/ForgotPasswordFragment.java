@@ -89,8 +89,8 @@ public class ForgotPasswordFragment extends Fragment {
                             Toast.makeText(getActivity(), "Failed Check the email adress you entered", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
+                });
             }
         });
     }
-});
+}
