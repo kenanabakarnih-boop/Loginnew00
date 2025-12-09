@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,18 +81,23 @@ public class ForgotPasswordFragment extends Fragment {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view ){
-                fbs.getAuth().sendPasswordResetEmail(etEmail.getText())
-                        .addOnCompleteListener(new onCompleteListener<Void>() {
-                    @Override
-                    public Void onComplete(NonNull Task<Void> task) {
-                        if (task.isSuccssful()){
+                fbs.getAuth().sendPasswordResetEmail(String.valueOf(etEmail.getText()))
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+
+                            public <task> Void onComplete(NonNull Task <Void> task) {
+                        if (task.IsSuccssful()){
                             Toast.makeText(getActivity(), "Check your email ", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
                             Toast.makeText(getActivity(), "Failed Check the email adress you entered", Toast.LENGTH_SHORT).show();
                         }
-                    }
+                                return null;
+                            }
                 });
             }
         });
