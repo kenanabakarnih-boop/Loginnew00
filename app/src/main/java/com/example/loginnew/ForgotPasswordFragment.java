@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 /**
@@ -82,23 +84,18 @@ public class ForgotPasswordFragment extends Fragment {
             @Override
             public void onClick (View view ){
                 fbs.getAuth().sendPasswordResetEmail(String.valueOf(etEmail.getText()))
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
 
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 
-                            public <task> Void onComplete(NonNull Task <Void> task) {
-                        if (task.IsSuccssful()){
-                            Toast.makeText(getActivity(), "Check your email ", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(getActivity(), "Failed Check the email adress you entered", Toast.LENGTH_SHORT).show();
-                        }
-                                return null;
                             }
-                });
+                        });
             }
         });
     }
