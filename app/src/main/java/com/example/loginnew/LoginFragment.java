@@ -1,8 +1,8 @@
 package com.example.loginnew;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -13,82 +13,56 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
-
 
 public class LoginFragment extends Fragment {
 
     private FirebaseServices fbs;
-    private EditText etUsername ;
-    private EditText etPassword ;
-    private Button btnlogin ;
-    private TextView tvSignuplink;
-    private TextView tvSignupLinkLogin ;
+    private EditText etUsername;
+    private EditText etPassword;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
-
     @Override
-public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         fbs = FirebaseServices.getInstance();
-        etUsername = getView().findViewById(R.id.etUsernameLogin);
-        etPassword = getView().findViewById(R.id.etPasswordLogin);
-        btnlogin = getView().findViewById(R.id.btnLoginLogin);
-        tvSignuplink = getView().findViewById(R.id.tvSignupLinkLogin);
-        tvSignuplink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gotoSignupFragment();
+
+        etUsername = view.findViewById(R.id.etUsernameLogin);
+        etPassword = view.findViewById(R.id.etPasswordLogin);
+        Button btnLogin = view.findViewById(R.id.btnLoginLogin);
+        TextView tvSignupLink = view.findViewById(R.id.tvSignupLinkLogin);
+
+        tvSignupLink.setOnClickListener(v -> gotoSignupFragment());
+
+        btnLogin.setOnClickListener(v -> {
+            String username = etUsername.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-        });
-
-        btnlogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                if (username.trim().isEmpty() && password.trim().isEmpty()) {
-                    Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                fbs.getAuth().signInWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(getActivity(), "You have successfully loged in!", Toast.LENGTH_SHORT).show();
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Faild to login ", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-
-
+            fbs.getAuth().signInWithEmailAndPassword(username, password)
+                    .addOnSuccessListener(authResult ->
+                            Toast.makeText(getActivity(), "You have successfully logged in!", Toast.LENGTH_SHORT).show()
+                    )
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getActivity(), "Failed to login", Toast.LENGTH_SHORT).show()
+                    );
         });
     }
 
     private void gotoSignupFragment() {
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frameLayoutMain , new SignupFragment());
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayoutMain, new SignupFragment());
         ft.commit();
-
     }
-
 }
 
