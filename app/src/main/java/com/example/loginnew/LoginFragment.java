@@ -4,22 +4,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.AuthResult;
 
 public class LoginFragment extends Fragment {
 
-    private FirebaseServices fbs;
-    private EditText etUsername;
-    private EditText etPassword;
+    private EditText etEmailLogin, etPasswordLogin;
+    private Button btnLogin, btnResetPassword;
+    private TextView tvGoToSignup;
+    private ImageView btnBackToSignup, btnGoToAdd;
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,38 +33,36 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        fbs = FirebaseServices.getInstance();
+        // ربط العناصر من fragment_login.xml
+        etEmailLogin = view.findViewById(R.id.etEmailLogin);
+        etPasswordLogin = view.findViewById(R.id.etPasswordLogin);
+        btnLogin = view.findViewById(R.id.btnLogin);
+        btnResetPassword = view.findViewById(R.id.btnResetPassword);
+        tvGoToSignup = view.findViewById(R.id.tvGoToSignup);
+        btnBackToSignup = view.findViewById(R.id.btnBackToSignup);
+        btnGoToAdd = view.findViewById(R.id.btnGoToAdd);
 
-        etUsername = view.findViewById(R.id.etUsernameLogin);
-        etPassword = view.findViewById(R.id.etPasswordLogin);
-        Button btnLogin = view.findViewById(R.id.btnLoginLogin);
-        TextView tvSignupLink = view.findViewById(R.id.tvSignupLinkLogin);
-
-        tvSignupLink.setOnClickListener(v -> gotoSignupFragment());
-
+        // أمثلة على الضغط
         btnLogin.setOnClickListener(v -> {
-            String username = etUsername.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(getActivity(), "Some fields are empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            fbs.getAuth().signInWithEmailAndPassword(username, password)
-                    .addOnSuccessListener(authResult ->
-                            Toast.makeText(getActivity(), "You have successfully logged in!", Toast.LENGTH_SHORT).show()
-                    )
-                    .addOnFailureListener(e ->
-                            Toast.makeText(getActivity(), "Failed to login", Toast.LENGTH_SHORT).show()
-                    );
+            String email = etEmailLogin.getText().toString().trim();
+            String password = etPasswordLogin.getText().toString().trim();
         });
-    }
 
-    private void gotoSignupFragment() {
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        ft.replace(R.id.frameLayoutMain, new SignupFragment());
-        ft.commit();
+        tvGoToSignup.setOnClickListener(v -> {
+            // الانتقال للساين اب
+        });
+
+        btnResetPassword.setOnClickListener(v -> {
+            // الانتقال لنسيت كلمة المرور
+        });
+
+        btnGoToAdd.setOnClickListener(v -> {
+            // الانتقال إلى AddFragment
+        });
+
+        btnBackToSignup.setOnClickListener(v -> {
+            // رجوع للساين اب
+        });
     }
 }
 
