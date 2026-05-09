@@ -51,7 +51,7 @@ public class RideListFragment extends Fragment {
                             RideModel ride = ds.getValue(RideModel.class);
                             list.add(ride);
                         }
-                        adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged(); // ← تم تصحيحها
                     }
 
                     @Override

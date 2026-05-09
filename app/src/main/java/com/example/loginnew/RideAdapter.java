@@ -29,6 +29,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
     @Override
     public void onBindViewHolder(@NonNull RideViewHolder holder, int position) {
         RideModel ride = list.get(position);
+
         holder.tvStart.setText("من: " + ride.startLocation);
         holder.tvDest.setText("إلى: " + ride.destination);
         holder.tvPrice.setText("السعر: " + ride.price + " شيكل");
@@ -51,4 +52,3 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
         }
     }
 }
-
