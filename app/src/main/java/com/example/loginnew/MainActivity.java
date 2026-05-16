@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentContainerView, fragment); // ← هذا هو الـ ID الصحيح
+        ft.replace(R.id.nav_host_fragment, fragment); // ← هذا هو الـ ID الصحيح
         ft.commit();
     }
 }

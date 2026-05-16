@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder> {
+public class AdminRideAdapter extends RecyclerView.Adapter<AdminRideAdapter.RideViewHolder> {
 
     private ArrayList<RideModel> rideList;
     private Context context;
 
-    public RideAdapter(ArrayList<RideModel> rideList, Context context) {
+    public AdminRideAdapter(ArrayList<RideModel> rideList, Context context) {
         this.rideList = rideList;
         this.context = context;
     }
@@ -24,7 +24,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
     @NonNull
     @Override
     public RideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.ride_adapter, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.ride_item, parent, false);
         return new RideViewHolder(view);
     }
 
@@ -59,3 +59,5 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
         }
     }
 }
+
+

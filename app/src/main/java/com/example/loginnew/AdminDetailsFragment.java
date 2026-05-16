@@ -2,7 +2,6 @@ package com.example.loginnew;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,50 +18,59 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class RideListFragment extends Fragment {
+public class AdminDetailsFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView rvAdminRides;
+    private ArrayList<RideModel> rideList;
     private RideAdapter adapter;
-    private List<RideModel> rideList;
+
     private DatabaseReference ridesRef;
 
-    public RideListFragment() {}
+    public AdminDetailsFragment() {
+        // Required empty constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_ridelist, container, false);
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_admindetails, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvAdminRides = view.findViewById(R.id.rvAdminRides);
+        rvAdminRides.setLayoutManager(new LinearLayoutManager(getContext()));
 
         rideList = new ArrayList<>();
-        adapter = new RideAdapter(new ArrayList<>(rideList), getContext());
-
-        recyclerView.setAdapter(adapter);
+        adapter = new RideAdapter(rideList, getContext());
+        rvAdminRides.setAdapter(adapter);
 
         ridesRef = FirebaseDatabase.getInstance().getReference("rides");
 
+        loadRides();
+
+        return view;
+    }
+
+    private void loadRides() {
         ridesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 rideList.clear();
+
                 for (DataSnapshot data : snapshot.getChildren()) {
                     RideModel ride = data.getValue(RideModel.class);
-                    rideList.add(ride);
+                    if (ride != null) {
+                        rideList.add(ride);
+                    }
                 }
+
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
